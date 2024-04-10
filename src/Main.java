@@ -1,5 +1,5 @@
-
 import java.util.Scanner;
+
 public class Main {
 
     public static final String[] RIM = {"O", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX",
@@ -26,38 +26,39 @@ public class Main {
         String result = null;
 
         if (razbivka.length > 2) {
-
             throw new Exception("Формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)");
         }
-
-        if (razbivka.length < 2){
+        if (razbivka.length < 2) {
             throw new Exception("строка не является математической операцией");
         }
 
-
         boolean isRim = false; // флажок первое число Римское или нет
-
-        for (String rim : RIM) {
-            if (razbivka[0].contains(rim)) {
-                isRim = true;
-                break;
+        int i;
+        int j;
+        for (i = 1; i < RIM.length; i++) {
+            if (razbivka[0].equals(RIM[i])) {
+                for (j = 1; j < RIM.length; j++) {
+                    if (razbivka[1].equals(RIM[j])) {
+                        isRim = true;
+                        if (i > 10 || j > 10) {
+                            throw new Exception("Римские цифры должны быть от I до X");
+                        }
+                        result = rimcalculc(input, razbivka);
+                        break;
+                    }
+                }
             }
         }
-
 
         boolean isArab = false;// флажок второе число Арабское или нет
-
-        for (String arab : ARAB) {
-            if (razbivka[1].contains(arab)) {
+        for (int k = 0; k < ARAB.length; k++) {
+            if (razbivka[0].equals(ARAB[k]) && razbivka[1].equals(ARAB[k])) {
                 isArab = true;
+                result = arabcalculc(input, razbivka);
                 break;
             }
         }
-        if (isRim & !isArab) {
-            result = rimcalculc(input, razbivka);
-        } else if (!isRim & isArab) {
-            result = arabcalculc(input, razbivka);
-        } else {
+        if (!isRim && !isArab) {
             throw new Exception("используются одновременно разные системы счисления");
         }
         return result;
@@ -65,17 +66,14 @@ public class Main {
 
 
     public static String arabcalculc(String p, String[] razbivka) throws Exception {
-
         int dostau0;
         int dostau1;
         String result = null;
-
         try {
             dostau0 = Integer.parseInt(razbivka[0]);
             dostau1 = Integer.parseInt(razbivka[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new Exception("Cтрока не является математической операцией");
-
         }
 
         if (dostau0 > 10 || dostau1 > 10 || dostau0 <= 0 || dostau1 <= 0) {
@@ -119,8 +117,8 @@ public class Main {
             rezrus = rimzifra1 + rimzifra2;
         } else if (primer.contains("-")) {
             rezrus = rimzifra1 - rimzifra2;
-            if (rezrus < 0) {
-                throw new Exception("в римской системе нет отрицательных чисел");
+            if (rezrus < 1) {
+                throw new Exception("в римской системе нет отрицательных чисел и ноля");
             }
         } else if (primer.contains("*")) {
             rezrus = rimzifra1 * rimzifra2;
@@ -130,4 +128,3 @@ public class Main {
         return RIM[rezrus];
     }
 }
-
