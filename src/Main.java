@@ -51,11 +51,17 @@ public class Main {
         }
 
         boolean isArab = false;// флажок второе число Арабское или нет
-        for (int k = 0; k < ARAB.length; k++) {
-            if (razbivka[0].equals(ARAB[k]) && razbivka[1].equals(ARAB[k])) {
-                isArab = true;
-                result = arabcalculc(input, razbivka);
-                break;
+        int k;
+        int l;
+        for (k = 0; k < ARAB.length; k++) {
+            if (razbivka[0].equals(ARAB[k])) {
+                for (l = 0; l < ARAB.length; l++) {
+                    if (razbivka[1].equals(ARAB[l])) {
+                        isArab = true;
+                        result = arabcalculc(input, razbivka);
+                        break;
+                    }
+                }
             }
         }
         if (!isRim && !isArab) {
@@ -74,10 +80,6 @@ public class Main {
             dostau1 = Integer.parseInt(razbivka[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new Exception("Cтрока не является математической операцией");
-        }
-
-        if (dostau0 > 10 || dostau1 > 10 || dostau0 <= 0 || dostau1 <= 0) {
-            throw new Exception("Калькулятор умеет работать с числами от 1 до 10");
         }
         if (p.contains("+")) {
             result = String.valueOf(dostau0 + dostau1);
